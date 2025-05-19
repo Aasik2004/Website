@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Export Products Store</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #004e89;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 0.5rem auto 0;
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            max-width: 400px;
+            margin: 1rem auto 2rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+        .search-bar input:focus {
+            outline: none;
+            border-color: #004e89;
+            box-shadow: 0 0 6px #004e89bb;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgb(0 0 0 / 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgb(0 0 0 / 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .product-info {
+            padding: 1rem 1.2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0;
+            margin-bottom: 0.25rem;
+            flex-grow: 1;
+            color: #004e89;
+        }
+
+        .product-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #0a8f08;
+            margin-bottom: 1rem;
+        }
+
+        .btn-buy {
+            background-color: #008cba;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.7rem;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-buy:hover {
+            background-color: #005f73;
+        }
+
+        /* Payment Form Section */
+        #payment-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 3rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #payment-section h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #004e89;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #004e89;
+            box-shadow: 0 0 6px #004e89bb;
+        }
+
+        #submit-payment {
+            background-color: #0a8f08;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        #submit-payment:hover {
+            background-color: #076702;
+        }
+
+        #payment-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            background-color: #004e89;
+            color: white;
+            padding: 1rem 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .product-image {
+                height: 140px;
+            }
+
+            #payment-section {
+                padding: 1.5rem 1rem;
+                margin: 2rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Global Export Store</h1>
+        <p>Your trusted source for quality export products</p>
+    </header>
+    <main>
+        <div class="search-bar">
+            <input type="search" id="search-input" placeholder="Search products..." aria-label="Search products" />
+        </div>
+
+        <section class="products-grid" id="products-grid" aria-live="polite" aria-label="Product catalog">
+            <!-- Product cards inserted by JS -->
+        </section>
+
+        <section id="payment-section" aria-label="Payment gateway">
+            <h2>Make a Payment</h2>
+            <form id="payment-form" novalidate>
+                <div class="form-group">
+                    <label for="product-select">Product</label>
+                    <select id="product-select" required>
+                        <!-- Options inserted by JS -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity-input">Quantity</label>
+                    <input type="number" id="quantity-input" min="1" value="1" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="name-input">Full Name</label>
+                    <input type="text" id="name-input" placeholder="Your full name" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="email-input">Email Address</label>
+                    <input type="email" id="email-input" placeholder="you@example.com" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="card-number-input">Card Number</label>
+                    <input type="text" id="card-number-input" placeholder="1234 5678 9012 3456" maxlength="19" required autocomplete="off" />
+                </div>
+
+                <div class="form-group" style="display: flex; gap: 1rem;">
+                    <div style="flex:1;">
+                        <label for="expiry-input">Expiry (MM/YY)</label>
+                        <input type="text" id="expiry-input" placeholder="MM/YY" maxlength="5" required autocomplete="off" />
+                    </div>
+                    <div style="flex:1;">
+                        <label for="cvc-input">CVC</label>
+                        <input type="text" id="cvc-input" placeholder="123" maxlength="4" required autocomplete="off" />
+                    </div>
+                </div>
+
+                <button type="submit" id="submit-payment" aria-live="polite">Pay Now</button>
+            </form>
+            <div id="payment-message" role="alert" aria-live="assertive"></div>
+        </section>
+    </main>
+    <footer>
+        &copy; 2024 Global Export Store. All rights reserved.
+    </footer>
+
+    <script>
+        // Sample product data
+        const products = [
+            {
+                id: 'p1',
+                name: 'Premium Quality Coffee Beans',
+                description: 'Arabica coffee beans sourced from Colombia, perfect aroma and flavor.',
+                price: 25.99,
+                image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                id: 'p2',
+                name: 'Organic Extra Virgin Olive Oil',
+                description: 'Cold-pressed organic olive oil from Mediterranean groves.',
+                price: 15.49,
+                image: 'https://images.unsplash.com/photo-1510626176961-4b8bc4ca366e?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                id: 'p3',
+                name: 'Natural Himalayan Pink Salt',
+                description: 'Unrefined pink salt with unique mineral content.',
+                price: 7.99,
+                image: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                id: 'p4',
+                name: 'Handwoven Banana Fiber Bags',
+                description: 'Eco-friendly, sustainable banana fiber bags handmade by artisans.',
+                price: 29.99,
+                image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80'
+            },
+            {
+                id: 'p5',
+                name: 'High-grade Tea Leaves',
+                description: 'Fresh and aromatic tea leaves from Darjeeling.',
+                price: 19.99,
+                image: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&w=400&q=80'
+            }
+        ];
+
+        const productsGrid = document.getElementById('products-grid');
+        const searchInput = document.getElementById('search-input');
+        const productSelect = document.getElementById('product-select');
+        const paymentForm = document.getElementById('payment-form');
+        const paymentMessage = document.getElementById('payment-message');
+        const quantityInput = document.getElementById('quantity-input');
+
+        // Render product cards
+        function renderProducts(filteredProducts) {
+            productsGrid.innerHTML = '';
+            if (filteredProducts.length === 0) {
+                productsGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; font-weight:600; font-size:1.2rem;">No products found.</p>';
+                return;
+            }
+            filteredProducts.forEach(product => {
+                const card = document.createElement('article');
+                card.className = 'product-card';
+                card.setAttribute('tabindex', '0');
+                card.innerHTML = `
+                    <div class="product-image" style="background-image: url('${product.image}');" aria-label="${product.name}"></div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <p class="product-desc">${product.description}</p>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <button class="btn-buy" data-product-id="${product.id}" aria-label="Buy ${product.name}">Buy</button>
+                    </div>
+                `;
+                productsGrid.appendChild(card);
+            });
+        }
+
+        // Populate product select options
+        function populateProductSelect() {
+            productSelect.innerHTML = '';
+            products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.id;
+                option.textContent = `${product.name} - $${product.price.toFixed(2)}`;
+                productSelect.appendChild(option);
+            });
+        }
+
+        // Filter products based on search query
+        function filterProducts(query) {
+            const loweredQuery = query.toLowerCase();
+            return products.filter(p =>
+                p.name.toLowerCase().includes(loweredQuery) ||
+                p.description.toLowerCase().includes(loweredQuery)
+            );
+        }
+
+        // Handle search input event
+        searchInput.addEventListener('input', (e) => {
+            const filtered = filterProducts(e.target.value);
+            renderProducts(filtered);
+        });
+
+        // Event delegation for Buy buttons
+        productsGrid.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-buy')) {
+                const productId = e.target.getAttribute('data-product-id');
+                productSelect.value = productId;
+                quantityInput.value = 1;
+                // Scroll to payment form and focus name input
+                document.getElementById('name-input').focus();
+                window.scrollTo({
+                    top: document.getElementById('payment-section').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Simple validation for card number (using Luhn Algorithm)
+        function validCardNumber(value) {
+            const cleanValue = value.replace(/\D/g, '');
+            let sum = 0;
+            let shouldDouble = false;
+            for (let i = cleanValue.length - 1; i >= 0; i--) {
+                let digit = parseInt(cleanValue.charAt(i), 10);
+                if (shouldDouble) {
+                    digit *= 2;
+                    if (digit > 9) digit -= 9;
+                }
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+            return (sum % 10) === 0 && cleanValue.length >= 13 && cleanValue.length <= 19;
+        }
+
+        // Validate expiry MM/YY format and check if future date
+        function validExpiry(value) {
+            if (!/^\d{2}\/\d{2}$/.test(value)) return false;
+            const [monthStr, yearStr] = value.split('/');
+            const month = parseInt(monthStr, 10);
+            const year = parseInt(yearStr, 10);
+            if (month < 1 || month > 12) return false;
+            const now = new Date();
+            const currentYear = now.getFullYear() % 100;
+            const currentMonth = now.getMonth() + 1;
+            if (year < currentYear) return false;
+            if (year === currentYear && month < currentMonth) return false;
+            return true;
+        }
+
+        // Validate CVC code (3 or 4 digits)
+        function validCVC(value) {
+            return /^\d{3,4}$/.test(value);
+        }
+
+        // Format card number input with spaces
+        const cardNumberInput = document.getElementById('card-number-input');
+        cardNumberInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').slice(0, 16);
+            let formatted = '';
+            for (let i = 0; i < val.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += ' ';
+                formatted += val[i];
+            }
+            e.target.value = formatted;
+        });
+
+        // Format expiry input MM/YY
+        const expiryInput = document.getElementById('expiry-input');
+        expiryInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').slice(0, 4);
+            if(val.length >= 3){
+                val = val.slice(0,2) + '/' + val.slice(2);
+            }
+            e.target.value = val;
+        });
+
+        paymentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            paymentMessage.textContent = '';
+            paymentMessage.style.color = '#333';
+
+            const productId = productSelect.value;
+            const quantity = parseInt(quantityInput.value, 10);
+            const name = document.getElementById('name-input').value.trim();
+            const email = document.getElementById('email-input').value.trim();
+            const cardNumber = cardNumberInput.value.trim();
+            const expiry = expiryInput.value.trim();
+            const cvc = document.getElementById('cvc-input').value.trim();
+
+            // Validate fields
+            if (!productId || !products.find(p => p.id === productId)) {
+                alert('Please select a valid product.');
+                return;
+            }
+            if (!(quantity > 0)) {
+                alert('Please enter a valid quantity.');
+                return;
+            }
+            if (name.length < 2) {
+                alert('Please enter your full name.');
+                return;
+            }
+            if (!/\S+@\S+\.\S+/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            if (!validCardNumber(cardNumber)) {
+                alert('Please enter a valid card number.');
+                return;
+            }
+            if (!validExpiry(expiry)) {
+                alert('Please enter a valid expiry date (MM/YY) that is not expired.');
+                return;
+            }
+            if (!validCVC(cvc)) {
+                alert('Please enter a valid CVC.');
+                return;
+            }
+
+            // Simulate payment processing
+            paymentMessage.style.color = '#004e89';
+            paymentMessage.textContent = 'Processing payment...';
+
+            setTimeout(() => {
+                paymentMessage.style.color = '#0a8f08';
+                const product = products.find(p => p.id === productId);
+                const total = (product.price * quantity).toFixed(2);
+                paymentMessage.innerHTML = `
+                    Payment successful!<br/>
+                    Thank you, <strong>${name}</strong>.<br/>
+                    You have purchased <strong>${quantity}</strong> unit(s) of <strong>${product.name}</strong>.<br/>
+                    Total charged: <strong>$${total}</strong>.<br/>
+                    A confirmation email has been sent to <strong>${email}</strong>.
+                `;
+                paymentForm.reset();
+            }, 2000);
+        });
+
+        // Initial setup
+        function init() {
+            renderProducts(products);
+            populateProductSelect();
+        }
+
+        init();
+    </script>
+</body>
+</html>
+
